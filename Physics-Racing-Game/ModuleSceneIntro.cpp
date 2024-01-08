@@ -18,6 +18,12 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 
+	// Create map
+	// {position.x, position.y, position.z}, 
+	// {rotation.x, rotation.y, rotation.z}, 
+	// {scale.x, scale.y, scale.z}
+	sog.CreateRectangle({ 0,0,0 }, { 0,0,0 }, { 10,10,10 });
+
 	return ret;
 }
 
