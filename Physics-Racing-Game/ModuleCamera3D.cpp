@@ -41,8 +41,7 @@ bool ModuleCamera3D::CleanUp()
 update_status ModuleCamera3D::Update(float dt)
 {
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
-		if (freecamera) freecamera = false;
-		else freecamera = true;
+		freecamera = !freecamera;
 	}
 
 	// Implement a debug camera with keys and mouse
