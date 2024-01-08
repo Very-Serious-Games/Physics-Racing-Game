@@ -40,12 +40,14 @@ bool ModuleCamera3D::CleanUp()
 // -----------------------------------------------------------------
 update_status ModuleCamera3D::Update(float dt)
 {
+	// DEBUG TOOLS
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
 		freecamera = !freecamera;
 	}
 
 	// Implement a debug camera with keys and mouse
 	// Now we can make this movememnt frame rate independant!
+
 	if (freecamera) {
 
 		vec3 newPos(0, 0, 0);
@@ -101,32 +103,33 @@ update_status ModuleCamera3D::Update(float dt)
 			}
 
 			Position = Reference + Z * length(Position);
+
 		}
-		else {
 
-			vec3 vehiclePos = vec3(App->player->vehicle->vehicle->getRigidBody()->getCenterOfMassPosition().x(), App->player->vehicle->vehicle->getRigidBody()->getCenterOfMassPosition().y() + 10.0f, App->player->vehicle->vehicle->getRigidBody()->getCenterOfMassPosition().z());
+	} else {
 
-			Position.x = App->player->vehicle->vehicle->getChassisWorldTransform().getOrigin().getX() - 25 * App->player->vehicle->vehicle->getForwardVector().getX();
-			Position.y = App->player->vehicle->vehicle->getChassisWorldTransform().getOrigin().getY() + 10 * App->player->vehicle->vehicle->getUpAxis();
-			Position.z = App->player->vehicle->vehicle->getChassisWorldTransform().getOrigin().getZ() - 25 * App->player->vehicle->vehicle->getForwardVector().getZ();
+		vec3 vehiclePos = vec3(App->player->vehicle->vehicle->getRigidBody()->getCenterOfMassPosition().x(), App->player->vehicle->vehicle->getRigidBody()->getCenterOfMassPosition().y() + 10.0f, App->player->vehicle->vehicle->getRigidBody()->getCenterOfMassPosition().z());
 
-			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
-			{
-				float Sensitivity = 0.0015f;
-				cameraRotation -= App->input->GetMouseXMotion() * Sensitivity;
+		Position.x = App->player->vehicle->vehicle->getChassisWorldTransform().getOrigin().getX() - 25 * App->player->vehicle->vehicle->getForwardVector().getX();
+		Position.y = App->player->vehicle->vehicle->getChassisWorldTransform().getOrigin().getY() + 10 * App->player->vehicle->vehicle->getUpAxis();
+		Position.z = App->player->vehicle->vehicle->getChassisWorldTransform().getOrigin().getZ() - 25 * App->player->vehicle->vehicle->getForwardVector().getZ();
 
-				if (cameraRotation > 0.20f)
-					cameraRotation = 0.20f;
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
+		{
+			float Sensitivity = 0.0015f;
+			cameraRotation -= App->input->GetMouseXMotion() * Sensitivity;
 
-				if (cameraRotation < -0.20f)
-					cameraRotation = -0.20f;
-			}
+			if (cameraRotation > 0.20f)
+				cameraRotation = 0.20f;
 
-			Position -= X * cameraRotation * -50.0f;
-			Reference -= X * cameraRotation * -50.0f;
-
-			LookAt(vehiclePos);
+			if (cameraRotation < -0.20f)
+				cameraRotation = -0.20f;
 		}
+
+		Position -= X * cameraRotation * -50.0f;
+		Reference -= X * cameraRotation * -50.0f;
+
+		LookAt(vehiclePos);
 
 	}
 
