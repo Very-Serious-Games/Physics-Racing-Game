@@ -2,6 +2,7 @@
 #include "Module.h"
 #include "Globals.h"
 #include "p2Point.h"
+#include "Application.h"
 
 struct PhysVehicle3D;
 

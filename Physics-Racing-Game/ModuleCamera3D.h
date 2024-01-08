@@ -25,8 +25,10 @@ private:
 public:
 	
 	vec3 X, Y, Z, Position, Reference;
+	bool freecamera = false;
 
 private:
 
 	mat4x4 ViewMatrix, ViewMatrixInverse;
+	float cameraRotation = 0.0f;
 };
