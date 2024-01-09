@@ -93,6 +93,14 @@ void Primitive::SetRotation(float angle, const vec3 &u)
 	transform.rotate(angle, u);
 }
 
+void Primitive::SetRotation(float x, float y, float z)
+{
+	mat4x4 finalRotation = transform.rotate(x, { 1,0,0 });
+	finalRotation = finalRotation * transform.rotate(y, { 0,1,0 });
+	finalRotation = finalRotation * transform.rotate(z, { 0,0,1 });
+	transform = finalRotation;
+}
+
 // ------------------------------------------------------------
 void Primitive::Scale(float x, float y, float z)
 {
