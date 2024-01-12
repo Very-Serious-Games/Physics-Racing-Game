@@ -50,6 +50,7 @@ public:
 	void Brake(float force);
 	void Turn(float degrees);
 	float GetKmh() const;
+	void Boost(float force);
 public:
 
 	VehicleInfo info;

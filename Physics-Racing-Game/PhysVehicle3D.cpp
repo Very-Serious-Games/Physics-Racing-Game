@@ -93,3 +93,9 @@ float PhysVehicle3D::GetKmh() const
 {
 	return vehicle->getCurrentSpeedKmHour();
 }
+
+// ----------------------------------------------------------------------------
+void PhysVehicle3D::Boost(float force)
+{
+	ApplyEngineForce(force);
+}

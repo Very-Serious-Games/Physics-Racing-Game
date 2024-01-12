@@ -1557,6 +1557,8 @@ update_status ModuleSceneIntro::Update(float dt)
 	p.axis = true;
 	p.Render();
 
+	sog.RenderObjects();
+
 	return UPDATE_CONTINUE;
 }
 
@@ -1575,6 +1577,9 @@ PhysBody3D* SceneObjectGenerator::CreateRectangle(vec3 position, vec3 rotation, 
 	c->size = scale;
 	c->SetRotation(rotation.x, rotation.y, rotation.z);
 	c->SetPos(position.x, position.y, position.z);
+
+	c->color = Grey;
+
 	if (!isSensor)ground.add((Primitive*)c);
 
 	return App->physics->AddBody(*c, mass);
