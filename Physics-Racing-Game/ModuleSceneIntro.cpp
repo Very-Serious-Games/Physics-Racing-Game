@@ -1585,7 +1585,7 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 
 		// Tienes que acceder a vehicle desde el modulo player
 		// Si tienes que programar alguna función para el movimiento del vehículo, hazlo en el modulo player
-		// App->player->vehicle.blablabla
+		//vehicle.Push(0, 10, 0);
 
 	}
 }

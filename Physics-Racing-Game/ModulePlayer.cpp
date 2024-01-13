@@ -163,3 +163,7 @@ void ModulePlayer::OnCollision(PhysBody3D* body1, PhysBody3D* body2) {
 		LOG("Water collision");
 	}
 }
+
+void ModulePlayer::Push(float x, float y, float z) {
+	vehicle->Push(x, y, z);
+}
