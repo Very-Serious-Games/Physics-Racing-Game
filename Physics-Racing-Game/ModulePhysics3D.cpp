@@ -384,3 +384,8 @@ int	 DebugDrawer::getDebugMode() const
 {
 	return mode;
 }
+
+vec3 ModulePhysics3D::ForceBuoyance(PhysBody3D* body, float volume) {
+	vec3 forceBuoy = { 0, (1 * abs(world->getGravity().getY() * volume) * -1) , 0 };
+	return forceBuoy;
+}

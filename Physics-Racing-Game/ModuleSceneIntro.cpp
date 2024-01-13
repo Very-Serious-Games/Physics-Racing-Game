@@ -1537,6 +1537,10 @@ bool ModuleSceneIntro::Start()
 	sog.CreateRectangle({ 371.74, 0.01, 196.95 }, { 0.00, 0.00, -0.00 }, { 20.00, 0.10, 20.00 });
 	sog.CreateRectangle({ 334.19, 0.01, 207.73 }, { 0.00, 0.00, -0.00 }, { 20.00, 0.10, 20.00 });
 
+
+	//fisicas
+
+
 	#pragma endregion
 
 	return ret;
@@ -1558,6 +1562,15 @@ update_status ModuleSceneIntro::Update(float dt)
 	p.Render();
 
 	sog.RenderObjects();
+
+	water_Cube = { 35, 40, 15 };
+	water_Cube.color = Blue;
+
+	water_Sensor = App->physics->AddBody({ 35,20,15 }, 0.0f);
+	water_Sensor->SetAsSensor(true);
+	water_Sensor->SetPos(10, 10, 0);
+	water_Cube.SetPos(10, 10, 0);
+	water_Cube.Render();
 
 	return UPDATE_CONTINUE;
 }
