@@ -22,7 +22,7 @@ bool ModuleSceneIntro::Start()
 	// Create map
 	#pragma region map coords
 	sog.CreateRectangle({ -598.54, 0.01, -44.65 }, { 0.00, 0.00, -0.00 }, { 20.00, 0.10, 20.00 });
-	sog.CreateRectangle({ 0.03, 0.00, 4.79 }, { 0.00, 0.00, -0.00 }, { 10.00, 1.00, 10.00 });
+	sog.CreateRectangle({ 0.03, 0.01, 4.79 }, { 0.00, 0.00, -0.00 }, { 10.00, 1.00, 10.00 });
 	sog.CreateRectangle({ -571.83, 0.01, -63.54 }, { 0.00, 0.00, -0.00 }, { 20.00, 0.10, 20.00 });
 	sog.CreateRectangle({ -534.12, 0.01, -68.56 }, { 0.00, 0.00, -0.00 }, { 20.00, 0.10, 20.00 });
 	sog.CreateRectangle({ -494.33, 0.01, -68.50 }, { 0.00, 0.00, -0.00 }, { 20.00, 0.10, 20.00 });
@@ -1541,8 +1541,25 @@ bool ModuleSceneIntro::Start()
 	#pragma endregion
 
 	// Create Z-Limit sensor
-	zLimiter = sog.CreateRectangle({ 0, -20, 0 }, { 0, 0, 0 }, {1000, 10, 1000}, 0, true);
+	zLimiter = sog.CreateRectangle({ 0, -20, 0 }, { 0, 0, 0 }, {2000, 10, 2000}, 0, true);
 	zLimiter->collision_listeners.add(this);
+
+	// Create Checkpoints
+	checkpoints.add(sog.CreateRectangle({ -325, 0, 100 }, { 0, 0, 0 }, { 50, 50, 50 }, 0, true));
+	checkpoints.add(sog.CreateRectangle({ -610, 0, 35 }, { 0, 0, 0 }, { 50, 50, 50 }, 0, true));
+	checkpoints.add(sog.CreateRectangle({ -50, 0, -72 }, { 0, 0, 0 }, { 50, 50, 50 }, 0, true));
+
+	// Create Finish Line
+	finishLine = sog.CreateRectangle({ -50, 0, -72 }, { 0, 0, 0 }, { 50, 50, 50 }, 0, true);
+	finishLine->collision_listeners.add(this);
+
+	// iterate checkpoints and add listener
+	p2List_item<PhysBody3D*>* checkpoint = checkpoints.getFirst();
+	while (checkpoint != NULL)
+	{
+		checkpoint->data->collision_listeners.add(this);
+		checkpoint = checkpoint->next;
+	}
 
 	return ret;
 }
