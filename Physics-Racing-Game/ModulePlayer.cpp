@@ -159,7 +159,7 @@ update_status ModulePlayer::Update(float dt)
 void ModulePlayer::OnCollision(PhysBody3D* body1, PhysBody3D* body2) {
 	if (body2 == App->scene_intro->water_Sensor)
 	{
-		vehicle->Push(0, 1000, 0);
+		vehicle->Push(0, 10, 0);
 		LOG("Water collision");
 	}
 }

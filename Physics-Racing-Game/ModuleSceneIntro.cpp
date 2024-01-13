@@ -3,6 +3,7 @@
 #include "ModuleSceneIntro.h"
 #include "Primitive.h"
 #include "PhysBody3D.h"
+#include "PhysVehicle3D.h"
 #include "Application.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -1539,7 +1540,13 @@ bool ModuleSceneIntro::Start()
 
 
 	//fisicas
+	water_Cube = { 35, 40, 15 };
+	water_Cube.color = Blue;
 
+	water_Sensor = App->physics->AddBody({ 35,20,15 }, 0.0f);
+	water_Sensor->SetAsSensor(true);
+	water_Sensor->SetPos(10, 10, 0);
+	water_Cube.SetPos(10, 10, 0);
 
 	#pragma endregion
 
@@ -1563,13 +1570,7 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	sog.RenderObjects();
 
-	water_Cube = { 35, 40, 15 };
-	water_Cube.color = Blue;
-
-	water_Sensor = App->physics->AddBody({ 35,20,15 }, 0.0f);
-	water_Sensor->SetAsSensor(true);
-	water_Sensor->SetPos(10, 10, 0);
-	water_Cube.SetPos(10, 10, 0);
+	
 	water_Cube.Render();
 
 	return UPDATE_CONTINUE;
@@ -1577,6 +1578,11 @@ update_status ModuleSceneIntro::Update(float dt)
 
 void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 {
+	if (body2 == water_Sensor)
+	{
+		vehicle->Push(0, 10, 0);
+
+	}
 }
 
 SceneObjectGenerator::SceneObjectGenerator(Application* App)
