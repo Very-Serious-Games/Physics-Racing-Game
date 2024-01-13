@@ -26,4 +26,5 @@ public:
 	float turn;
 	float acceleration;
 	float brake;
+	int lifes = 3;
 };

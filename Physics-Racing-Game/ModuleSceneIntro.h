@@ -57,4 +57,6 @@ public:
 	PhysMotor3D* right_wheel;
 
 	SceneObjectGenerator sog = SceneObjectGenerator(App);
+
+	PhysBody3D* zLimiter;
 };

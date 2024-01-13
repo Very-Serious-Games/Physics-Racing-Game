@@ -4,6 +4,7 @@
 #include "Primitive.h"
 #include "PhysBody3D.h"
 #include "Application.h"
+#include "PhysVehicle3D.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -1539,6 +1540,10 @@ bool ModuleSceneIntro::Start()
 
 	#pragma endregion
 
+	// Create Z-Limit sensor
+	zLimiter = sog.CreateRectangle({ 0, -20, 0 }, { 0, 0, 0 }, {1000, 10, 1000}, 0, true);
+	zLimiter->collision_listeners.add(this);
+
 	return ret;
 }
 
@@ -1564,6 +1569,9 @@ update_status ModuleSceneIntro::Update(float dt)
 
 void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 {
+	if (body2 == App->player->vehicle) {
+		App->player->vehicle->SetPos(0,0,0);
+	}
 }
 
 SceneObjectGenerator::SceneObjectGenerator(Application* App)
@@ -1578,11 +1586,12 @@ PhysBody3D* SceneObjectGenerator::CreateRectangle(vec3 position, vec3 rotation, 
 	c->SetRotation(rotation.x, rotation.y, rotation.z);
 	c->SetPos(position.x, position.y, position.z);
 
+	// Set color
 	c->color = Grey;
 
 	if (!isSensor)ground.add((Primitive*)c);
 
-	return App->physics->AddBody(*c, mass);
+	return App->physics->AddBody(*c, mass, isSensor);
 }
 
 void SceneObjectGenerator::CreateSphere(vec3 position, vec3 rotation, float radius, float mass, bool isSensor)
