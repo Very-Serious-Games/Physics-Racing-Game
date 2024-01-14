@@ -22,6 +22,7 @@ public:
 	vec3 GetPos();
 	void SetRotation(float x, float y, float z);
 	vec3 GetRotation();
+	vec3 GetVelocity();
 
 public:
 	btRigidBody* body = nullptr;

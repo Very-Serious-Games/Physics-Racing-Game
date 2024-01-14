@@ -59,6 +59,7 @@ public:
 	SceneObjectGenerator sog = SceneObjectGenerator(App);
 
 	PhysBody3D* zLimiter;
+	PhysBody3D* slowZone;
 	PhysBody3D* finishLine;
 	p2List<PhysBody3D*> checkpoints;
 	vec3 checkpointPos;
