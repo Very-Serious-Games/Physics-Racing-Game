@@ -140,7 +140,7 @@ update_status ModulePlayer::Update(float dt)
 		acceleration = -(MAX_ACCELERATION/2);
 	}
 
-	if(App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT)
+	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
 	{
 		brake = BRAKE_POWER;
 	}
@@ -148,6 +148,38 @@ update_status ModulePlayer::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 	{
 		acceleration = MAX_ACCELERATION * 5;
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
+	{
+		gravityModifier -= 2.0f;
+		gravityV.setY(gravityModifier);
+		LOG("Gravity: %f", gravityV.getY());
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
+	{
+		gravityModifier += 2.0f;
+		gravityV.setY(gravityModifier);
+		LOG("Gravity: %f", gravityV.getY());
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
+	{
+		vehicle->info.mass += 100.0f;
+		App->physics->UpdateMass(this->vehicle, this->vehicle->info.mass);
+		LOG("Mass: %f", vehicle->info.mass)
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
+	{
+		vehicle->info.mass -= 100.0f;
+		if (vehicle->info.mass == 0.0f)
+		{
+			vehicle->info.mass += 100.0f;
+		}
+		App->physics->UpdateMass(this->vehicle, this->vehicle->info.mass);
+		LOG("Mass: %f", vehicle->info.mass)
 	}
 
 	vehicle->ApplyEngineForce(acceleration);
@@ -168,7 +200,6 @@ update_status ModulePlayer::Update(float dt)
 
 	return UPDATE_CONTINUE;
 }
-
 
 void ModulePlayer::SetLifes(int lifes) {
 	this->lifes = lifes;

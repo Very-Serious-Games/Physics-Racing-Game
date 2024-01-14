@@ -26,6 +26,8 @@ public:
 	float turn;
 	float acceleration;
 	float brake;
+	btVector3 gravityV = { 0,-10,0 };
+	float gravityModifier = -10.0f;
 	int lifes = 3;
 
 	void SetLifes(int lifes);
