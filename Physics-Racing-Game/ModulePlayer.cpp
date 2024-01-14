@@ -27,7 +27,7 @@ bool ModulePlayer::Start()
 	car.suspensionStiffness = 15.88f;
 	car.suspensionCompression = 0.83f;
 	car.suspensionDamping = 0.88f;
-	car.maxSuspensionTravelCm = 1000.0f;
+	car.maxSuspensionTravelCm = 100.0f;
 	car.frictionSlip = 50.5;
 	car.maxSuspensionForce = 6000.0f;
 
@@ -98,7 +98,7 @@ bool ModulePlayer::Start()
 
 	vehicle = App->physics->AddVehicle(car);
 	// SET VEHICLE SPAWN POSITION
-	vehicle->SetPos(0, 5, 5);
+	vehicle->SetPos(0, 0, -3);
 	
 	return true;
 }
