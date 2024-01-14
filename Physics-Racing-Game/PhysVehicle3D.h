@@ -1,5 +1,8 @@
 #pragma once
 
+#include "PhysVehicle3D.h"
+#include "Primitive.h"
+#include "Bullet/include/btBulletDynamicsCommon.h"
 #include "PhysBody3D.h"
 #include "glmath.h"
 
@@ -46,6 +49,7 @@ public:
 	~PhysVehicle3D();
 
 	void Render();
+	void CreateCarObject(vec3 info, btVector3 offset);
 	void ApplyEngineForce(float force);
 	void Brake(float force);
 	void Turn(float degrees);
