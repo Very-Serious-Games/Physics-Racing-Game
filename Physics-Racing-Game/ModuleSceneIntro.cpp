@@ -19,6 +19,9 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 
+	// Background muisc
+	App->audio->PlayMusic("Assets/Audio/music.ogg", 1.0f);
+
 	// Create map
 	#pragma region map coords
 	sog.CreateRectangle({ -598.54, 0.01, -44.65 }, { 0.00, 0.00, -0.00 }, { 20.00, 0.10, 20.00 });

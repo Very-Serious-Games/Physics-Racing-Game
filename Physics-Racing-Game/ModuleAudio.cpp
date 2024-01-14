@@ -154,3 +154,15 @@ bool ModuleAudio::PlayFx(unsigned int id, int repeat)
 
 	return ret;
 }
+
+// Stop WAV
+bool ModuleAudio::StopFx(unsigned int id)
+{
+	return Mix_HaltChannel(id - 1);
+}
+
+// Check if a channel is playing
+bool ModuleAudio::IsChannelEnded(int channel)
+{
+	return Mix_Playing(channel) == 0;
+}

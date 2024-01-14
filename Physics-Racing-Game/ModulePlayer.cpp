@@ -18,6 +18,19 @@ bool ModulePlayer::Start()
 {
 	LOG("Loading player");
 
+	audioMotor = App->audio->LoadFx("Assets/Audio/engine.wav");
+	soundPlayedMotor = false;  // Initialize the flag
+	if (audioMotor == -1)
+	{
+		LOG("Failed to load engine.wav sound effect");
+	}
+
+	audioBrake = App->audio->LoadFx("Assets/Audio/brake.wav");
+	if (audioBrake == -1)
+	{
+		LOG("Failed to load brake.wav sound effect");
+	}
+
 	VehicleInfo car;
 
 	// Car properties ----------------------------------------
@@ -121,6 +134,16 @@ update_status ModulePlayer::Update(float dt)
 	if(App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 	{
 		acceleration = MAX_ACCELERATION;
+
+		// Play the sound only if it hasn't been played during this key press
+		if (!soundPlayedMotor)
+		{
+			App->audio->PlayFx(audioMotor);
+			soundPlayedMotor = true;  // Set the flag to true after playing the sound
+		}
+	} else {
+		soundPlayedMotor = false;  // Reset the flag when the key is released
+		App->audio->StopFx(audioMotor);
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
@@ -143,6 +166,10 @@ update_status ModulePlayer::Update(float dt)
 	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
 	{
 		brake = BRAKE_POWER;
+		if (App->audio->IsChannelEnded(audioBrake)) {
+			App->audio->PlayFx(audioBrake);
+		}
+		
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)

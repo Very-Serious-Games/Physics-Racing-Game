@@ -8,7 +8,7 @@ struct PhysVehicle3D;
 
 #define MAX_ACCELERATION 1000.0f
 #define TURN_DEGREES 15.0f * DEGTORAD
-#define BRAKE_POWER 1000.0f
+#define BRAKE_POWER 200.0f
 
 class ModulePlayer : public Module
 {
@@ -32,4 +32,10 @@ public:
 
 	void SetLifes(int lifes);
 	int GetLifes();
+
+	// Audio efects
+	uint audioMotor = 0;
+	bool soundPlayedMotor;
+
+	uint audioBrake = 0;
 };
