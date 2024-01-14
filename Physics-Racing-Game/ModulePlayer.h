@@ -33,14 +33,15 @@ public:
 	void SetLifes(int lifes);
 	int GetLifes();
 
+	bool physics = true;
+	bool slowed = false;
+
+	void SetMaxAcceleration(float maxAcceleration);
+	float GetMaxAcceleration();
+
 	// Audio efects
 	uint audioMotor = 0;
 	bool soundPlayedMotor;
 
 	uint audioBrake = 0;
-
-	bool physics = true;
-
-	void SetMaxAcceleration(float maxAcceleration);
-	float GetMaxAcceleration();
 };
