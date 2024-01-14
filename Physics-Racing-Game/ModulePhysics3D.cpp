@@ -330,7 +330,9 @@ PhysVehicle3D* ModulePhysics3D::AddVehicle(const VehicleInfo& info)
 }
 
 void ModulePhysics3D::UpdateMass(PhysVehicle3D* vehicle, float mass) {
-	vehicle->body->setMassProps(mass, btVector3(0, 0, 0));
+	btVector3 inertia;
+	vehicle->body->getCollisionShape()->calculateLocalInertia(mass, inertia);
+	vehicle->body->setMassProps(mass, inertia);
 }
 
 // ---------------------------------------------------------
