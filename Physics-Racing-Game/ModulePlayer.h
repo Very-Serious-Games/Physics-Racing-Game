@@ -31,6 +31,7 @@ public:
 	int lifes = 3;
 
 	bool physics = true;
+	bool slowed = false;
 
 	void SetLifes(int lifes);
 	int GetLifes();
