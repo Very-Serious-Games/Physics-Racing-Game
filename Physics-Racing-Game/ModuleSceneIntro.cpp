@@ -1631,17 +1631,13 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 
 	if (body1 == slowZone && body2 == App->player->vehicle)
 	{
-		App->player->SetMaxAcceleration(100.0f);
 		if (App->player->slowed == false)
 		{
+			App->player->SetMaxAcceleration(100.0f);
 			App->player->vehicle->SetVelocity(App->player->vehicle->GetVelocity()/2);
 			App->player->slowed = true;
 		}
 		
-	}
-	else
-	{
-		App->player->SetMaxAcceleration(1000.0f);
 	}
 
 	if (body1 == finishLine && body2 == App->player->vehicle) {

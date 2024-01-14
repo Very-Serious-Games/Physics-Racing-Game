@@ -235,6 +235,8 @@ update_status ModulePlayer::Update(float dt)
 
 	vehicle->Render();
 
+	App->player->SetMaxAcceleration(1000.0f);
+
 	/*
 	if (vehicle->GetPos().y < -20) {
 		vehicle->SetPos(0, 0, 0);
