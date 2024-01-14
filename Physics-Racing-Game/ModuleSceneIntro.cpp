@@ -1553,6 +1553,10 @@ bool ModuleSceneIntro::Start()
 	finishLine = sog.CreateRectangle({ -50, 0, -72 }, { 0, 0, 0 }, { 50, 50, 50 }, 0, true);
 	finishLine->collision_listeners.add(this);
 
+	//slow zone
+	slowZone = sog.CreateRectangle({ -510, 0, -135 }, { 0, 0, 0 }, { 250, 50, 250 }, 0, true);
+	slowZone->collision_listeners.add(this);
+
 	// iterate checkpoints and add listener
 	p2List_item<PhysBody3D*>* checkpoint = checkpoints.getFirst();
 	while (checkpoint != NULL)
@@ -1621,6 +1625,16 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 			App->player->SetLifes(App->player->GetLifes() - 1);
 		}
 	}
+
+	if (body1 == slowZone && body2 == App->player->vehicle)
+	{
+		App->player->SetMaxAcceleration(10.0f);
+	}
+	else
+	{
+		App->player->SetMaxAcceleration(1000.0f);
+	}
+
 	if (body1 == finishLine && body2 == App->player->vehicle) {
 		exit(0);
 	}

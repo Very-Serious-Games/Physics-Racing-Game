@@ -62,3 +62,8 @@ vec3 PhysBody3D::GetRotation() {
 	btQuaternion rot = body->getWorldTransform().getRotation();
 	return vec3(rot.getX(), rot.getY(), rot.getZ());
 }
+
+vec3 PhysBody3D::GetVelocity() {
+	btVector3 vel = body->getLinearVelocity();
+	return vec3(vel.getX(), vel.getY(), vel.getZ());
+}

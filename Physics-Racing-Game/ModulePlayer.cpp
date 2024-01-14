@@ -228,3 +228,11 @@ void ModulePlayer::SetLifes(int lifes) {
 int ModulePlayer::GetLifes() {
 	return lifes;
 }
+
+void ModulePlayer::SetMaxAcceleration(float maxAcceleration) {
+	this->MAX_ACCELERATION = maxAcceleration;
+}
+
+float ModulePlayer::GetMaxAcceleration() {
+	return MAX_ACCELERATION;
+}
