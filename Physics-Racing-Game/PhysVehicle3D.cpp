@@ -110,3 +110,10 @@ void PhysVehicle3D::SetRotation(vec3 rotation) {
 	q.setEuler(rotation.x, rotation.y, rotation.z);
 	body->setWorldTransform(btTransform(q, body->getWorldTransform().getOrigin()));
 }
+void PhysVehicle3D::SetFriction(float friction) {
+	for (int i = 0; i < vehicle->getNumWheels(); ++i)
+	{
+		vehicle->updateWheelTransform(i);
+		vehicle->getWheelInfo(i).m_frictionSlip = friction;
+	}
+}

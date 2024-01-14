@@ -99,7 +99,7 @@ bool ModulePlayer::Start()
 	vehicle = App->physics->AddVehicle(car);
 	// SET VEHICLE SPAWN POSITION
 	vehicle->SetPos(0, 5, 5);
-	
+
 	return true;
 }
 
@@ -150,28 +150,48 @@ update_status ModulePlayer::Update(float dt)
 		acceleration = MAX_ACCELERATION * 5;
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+	{
+		physics = !physics;
+
+		if (physics == false)
+		{
+			gravityV.setY(0);
+			vehicle->info.frictionSlip = 0.0f;
+			LOG("Physics disabled: Gravity: %f Friction: %f", gravityV.getY(), vehicle->info.frictionSlip);
+
+		}
+		else if (physics == true)
+		{
+			gravityV.setY(gravityModifier);
+			vehicle->info.frictionSlip = 50.5f;
+
+			LOG("Physics enabled: Gravity: %f Friction: %f", gravityV.getY(), vehicle->info.frictionSlip);
+		}
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN && physics == true)
 	{
 		gravityModifier -= 2.0f;
 		gravityV.setY(gravityModifier);
 		LOG("Gravity: %f", gravityV.getY());
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN && physics == true)
 	{
 		gravityModifier += 2.0f;
 		gravityV.setY(gravityModifier);
 		LOG("Gravity: %f", gravityV.getY());
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN && physics == true)
 	{
 		vehicle->info.mass += 100.0f;
 		App->physics->UpdateMass(this->vehicle, this->vehicle->info.mass);
 		LOG("Mass: %f", vehicle->info.mass)
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN && physics == true)
 	{
 		vehicle->info.mass -= 100.0f;
 		if (vehicle->info.mass == 0.0f)

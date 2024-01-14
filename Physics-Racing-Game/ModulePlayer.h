@@ -30,6 +30,8 @@ public:
 	float gravityModifier = -10.0f;
 	int lifes = 3;
 
+	bool physics = true;
+
 	void SetLifes(int lifes);
 	int GetLifes();
 };
