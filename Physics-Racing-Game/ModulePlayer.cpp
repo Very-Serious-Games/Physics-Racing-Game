@@ -18,6 +18,19 @@ bool ModulePlayer::Start()
 {
 	LOG("Loading player");
 
+	audioMotor = App->audio->LoadFx("Assets/Audio/engine.wav");
+	soundPlayedMotor = false;  // Initialize the flag
+	if (audioMotor == -1)
+	{
+		LOG("Failed to load engine.wav sound effect");
+	}
+
+	audioBrake = App->audio->LoadFx("Assets/Audio/brake.wav");
+	if (audioBrake == -1)
+	{
+		LOG("Failed to load brake.wav sound effect");
+	}
+
 	VehicleInfo car;
 
 	// Car properties ----------------------------------------
@@ -27,14 +40,14 @@ bool ModulePlayer::Start()
 	car.suspensionStiffness = 15.88f;
 	car.suspensionCompression = 0.83f;
 	car.suspensionDamping = 0.88f;
-	car.maxSuspensionTravelCm = 1000.0f;
+	car.maxSuspensionTravelCm = 100.0f;
 	car.frictionSlip = 50.5;
 	car.maxSuspensionForce = 6000.0f;
 
 	// Wheel properties ---------------------------------------
 	float connection_height = 1.2f;
-	float wheel_radius = 0.6f;
-	float wheel_width = 0.5f;
+	float wheel_radius = 0.8f;
+	float wheel_width = 0.8f;
 	float suspensionRestLength = 1.2f;
 
 	// Don't change anything below this line ------------------
@@ -49,7 +62,7 @@ bool ModulePlayer::Start()
 	car.wheels = new Wheel[car.num_wheels];
 
 	// FRONT-LEFT ------------------------
-	car.wheels[0].connection.Set(half_width - 0.3f * wheel_width, connection_height, half_length - wheel_radius);
+	car.wheels[0].connection.Set(2.2, 1.5, 4.5);
 	car.wheels[0].direction = direction;
 	car.wheels[0].axis = axis;
 	car.wheels[0].suspensionRestLength = suspensionRestLength;
@@ -61,7 +74,7 @@ bool ModulePlayer::Start()
 	car.wheels[0].steering = true;
 
 	// FRONT-RIGHT ------------------------
-	car.wheels[1].connection.Set(-half_width + 0.3f * wheel_width, connection_height, half_length - wheel_radius);
+	car.wheels[1].connection.Set(-1.8, 1.5, 4.5);
 	car.wheels[1].direction = direction;
 	car.wheels[1].axis = axis;
 	car.wheels[1].suspensionRestLength = suspensionRestLength;
@@ -73,7 +86,7 @@ bool ModulePlayer::Start()
 	car.wheels[1].steering = true;
 
 	// REAR-LEFT ------------------------
-	car.wheels[2].connection.Set(half_width - 0.3f * wheel_width, connection_height, -half_length + wheel_radius);
+	car.wheels[2].connection.Set(2.2, 1.5, -1.5);
 	car.wheels[2].direction = direction;
 	car.wheels[2].axis = axis;
 	car.wheels[2].suspensionRestLength = suspensionRestLength;
@@ -85,7 +98,7 @@ bool ModulePlayer::Start()
 	car.wheels[2].steering = false;
 
 	// REAR-RIGHT ------------------------
-	car.wheels[3].connection.Set(-half_width + 0.3f * wheel_width, connection_height, -half_length + wheel_radius);
+	car.wheels[3].connection.Set(-1.8, 1.5, -1.5);
 	car.wheels[3].direction = direction;
 	car.wheels[3].axis = axis;
 	car.wheels[3].suspensionRestLength = suspensionRestLength;
@@ -97,7 +110,8 @@ bool ModulePlayer::Start()
 	car.wheels[3].steering = false;
 
 	vehicle = App->physics->AddVehicle(car);
-	vehicle->SetPos(0, 12, 10);
+	// SET VEHICLE SPAWN POSITION
+	vehicle->SetPos(0, 0, -3);
 	
 	return true;
 }
@@ -113,28 +127,106 @@ bool ModulePlayer::CleanUp()
 // Update: draw background
 update_status ModulePlayer::Update(float dt)
 {
+
+	// CAR CONTROLS
 	turn = acceleration = brake = 0.0f;
 
-	if(App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+	if(App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 	{
 		acceleration = MAX_ACCELERATION;
+
+		// Play the sound only if it hasn't been played during this key press
+		if (!soundPlayedMotor)
+		{
+			App->audio->PlayFx(audioMotor);
+			soundPlayedMotor = true;  // Set the flag to true after playing the sound
+		}
+	} else {
+		soundPlayedMotor = false;  // Reset the flag when the key is released
+		App->audio->StopFx(audioMotor);
 	}
 
-	if(App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+	if(App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
 		if(turn < TURN_DEGREES)
 			turn +=  TURN_DEGREES;
 	}
 
-	if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+	if(App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
 		if(turn > -TURN_DEGREES)
 			turn -= TURN_DEGREES;
 	}
 
-	if(App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+	if(App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+	{
+		acceleration = -(MAX_ACCELERATION/2);
+	}
+
+	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
 	{
 		brake = BRAKE_POWER;
+		if (App->audio->IsChannelEnded(audioBrake)) {
+			App->audio->PlayFx(audioBrake);
+		}
+		
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
+	{
+		acceleration = MAX_ACCELERATION * 5;
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+	{
+		physics = !physics;
+
+		if (physics == false)
+		{
+			gravityV.setY(0);
+			vehicle->info.frictionSlip = 0.0f;
+			LOG("Physics disabled: Gravity: %f Friction: %f", gravityV.getY(), vehicle->info.frictionSlip);
+
+		}
+		else if (physics == true)
+		{
+			gravityV.setY(gravityModifier);
+			vehicle->info.frictionSlip = 50.5f;
+
+			LOG("Physics enabled: Gravity: %f Friction: %f", gravityV.getY(), vehicle->info.frictionSlip);
+		}
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN && physics == true)
+	{
+		gravityModifier -= 2.0f;
+		gravityV.setY(gravityModifier);
+		LOG("Gravity: %f", gravityV.getY());
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN && physics == true)
+	{
+		gravityModifier += 2.0f;
+		gravityV.setY(gravityModifier);
+		LOG("Gravity: %f", gravityV.getY());
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN && physics == true)
+	{
+		vehicle->info.mass += 100.0f;
+		App->physics->UpdateMass(this->vehicle, this->vehicle->info.mass);
+		LOG("Mass: %f", vehicle->info.mass)
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN && physics == true)
+	{
+		vehicle->info.mass -= 100.0f;
+		if (vehicle->info.mass == 0.0f)
+		{
+			vehicle->info.mass += 100.0f;
+		}
+		App->physics->UpdateMass(this->vehicle, this->vehicle->info.mass);
+		LOG("Mass: %f", vehicle->info.mass)
 	}
 
 	vehicle->ApplyEngineForce(acceleration);
@@ -143,12 +235,31 @@ update_status ModulePlayer::Update(float dt)
 
 	vehicle->Render();
 
+	/*
+	if (vehicle->GetPos().y < -20) {
+		vehicle->SetPos(0, 0, 0);
+	}
+	*/
+
 	char title[80];
-	sprintf_s(title, "%.1f Km/h", vehicle->GetKmh());
+	sprintf_s(title, "%.1f Km/h, position x: %f | y: %f | z: %f", vehicle->GetKmh(), vehicle->GetPos().x, vehicle->GetPos().y, vehicle->GetPos().z);
 	App->window->SetTitle(title);
 
 	return UPDATE_CONTINUE;
 }
 
+void ModulePlayer::SetLifes(int lifes) {
+	this->lifes = lifes;
+}
 
+int ModulePlayer::GetLifes() {
+	return lifes;
+}
 
+void ModulePlayer::SetMaxAcceleration(float maxAcceleration) {
+	this->MAX_ACCELERATION = maxAcceleration;
+}
+
+float ModulePlayer::GetMaxAcceleration() {
+	return MAX_ACCELERATION;
+}

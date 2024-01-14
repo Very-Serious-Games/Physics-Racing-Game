@@ -57,4 +57,11 @@ public:
 	PhysMotor3D* right_wheel;
 
 	SceneObjectGenerator sog = SceneObjectGenerator(App);
+
+	PhysBody3D* zLimiter;
+	PhysBody3D* slowZone;
+	PhysBody3D* finishLine;
+	p2List<PhysBody3D*> checkpoints;
+	vec3 checkpointPos;
+	vec3 checkpointRot;
 };

@@ -1,5 +1,8 @@
 #pragma once
 
+#include "PhysVehicle3D.h"
+#include "Primitive.h"
+#include "Bullet/include/btBulletDynamicsCommon.h"
 #include "PhysBody3D.h"
 #include "glmath.h"
 
@@ -46,12 +49,20 @@ public:
 	~PhysVehicle3D();
 
 	void Render();
+	void CreateCarObject(vec3 info, btVector3 offset);
 	void ApplyEngineForce(float force);
 	void Brake(float force);
 	void Turn(float degrees);
 	float GetKmh() const;
+	void Boost(float force);
 public:
 
 	VehicleInfo info;
 	btRaycastVehicle* vehicle;
+
+	void SetVelocity(vec3 velocity);
+	void SetAngularVelocity(vec3 angularVelocity);
+	void SetRotation(vec3 rotation);
+
+	void SetFriction(float friction);
 };
