@@ -101,8 +101,11 @@ update_status ModulePhysics3D::PreUpdate(float dt)
 // ---------------------------------------------------------
 update_status ModulePhysics3D::Update(float dt)
 {
-	if(App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+	world->setGravity(App->player->gravityV);
+
+	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
 		debug = !debug;
+	}
 
 	if(debug == true)
 	{
@@ -326,6 +329,12 @@ PhysVehicle3D* ModulePhysics3D::AddVehicle(const VehicleInfo& info)
 	return pvehicle;
 }
 
+void ModulePhysics3D::UpdateMass(PhysVehicle3D* vehicle, float mass) {
+	btVector3 inertia;
+	vehicle->body->getCollisionShape()->calculateLocalInertia(mass, inertia);
+	vehicle->body->setMassProps(mass, inertia);
+}
+
 // ---------------------------------------------------------
 void ModulePhysics3D::AddConstraintP2P(PhysBody3D& bodyA, PhysBody3D& bodyB, const vec3& anchorA, const vec3& anchorB)
 {
@@ -353,6 +362,9 @@ void ModulePhysics3D::AddConstraintHinge(PhysBody3D& bodyA, PhysBody3D& bodyB, c
 	constraints.add(hinge);
 	hinge->setDbgDrawSize(2.0f);
 }
+
+//update mass of the vehicle
+
 
 // =============================================
 void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
