@@ -99,3 +99,14 @@ void PhysVehicle3D::Boost(float force)
 {
 	ApplyEngineForce(force);
 }
+void PhysVehicle3D::SetVelocity(vec3 velocity) {
+	body->setLinearVelocity(btVector3(velocity.x, velocity.y, velocity.z));
+}
+void PhysVehicle3D::SetAngularVelocity(vec3 velocity) {
+	body->setAngularVelocity(btVector3(velocity.x, velocity.y, velocity.z));
+}
+void PhysVehicle3D::SetRotation(vec3 rotation) {
+	btQuaternion q;
+	q.setEuler(rotation.x, rotation.y, rotation.z);
+	body->setWorldTransform(btTransform(q, body->getWorldTransform().getOrigin()));
+}

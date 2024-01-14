@@ -27,4 +27,7 @@ public:
 	float acceleration;
 	float brake;
 	int lifes = 3;
+
+	void SetLifes(int lifes);
+	int GetLifes();
 };

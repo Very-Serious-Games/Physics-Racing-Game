@@ -61,4 +61,6 @@ public:
 	PhysBody3D* zLimiter;
 	PhysBody3D* finishLine;
 	p2List<PhysBody3D*> checkpoints;
+	vec3 checkpointPos;
+	vec3 checkpointRot;
 };

@@ -20,6 +20,8 @@ public:
 	void SetTransform(const float* matrix) const;
 	void SetPos(float x, float y, float z);
 	vec3 GetPos();
+	void SetRotation(float x, float y, float z);
+	vec3 GetRotation();
 
 public:
 	btRigidBody* body = nullptr;

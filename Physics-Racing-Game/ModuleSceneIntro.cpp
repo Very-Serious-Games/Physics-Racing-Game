@@ -1586,8 +1586,43 @@ update_status ModuleSceneIntro::Update(float dt)
 
 void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 {
-	if (body2 == App->player->vehicle) {
-		App->player->vehicle->SetPos(0,0,0);
+	// Check if body1 is a checkpoint
+	p2List_item<PhysBody3D*>* checkpoint = checkpoints.getFirst();
+	p2List_item<PhysBody3D*>* nextCheckpoint = checkpoint->next;
+	while (checkpoint != NULL)
+	{
+		if (body1 == checkpoint->data && body2 == App->player->vehicle){
+
+			//save the position of the checkpoint in a variable to use it as a respawn point if the player dies
+			checkpointPos = checkpoint->data->GetPos();
+			//save the rotation of the checkpoint in a variable to use it as a respawn point if the player dies
+			checkpointRot = checkpoint->data->GetRotation();
+
+			// Check if checkpoint is the next one
+			if (checkpoint == nextCheckpoint)
+			{
+				// Set next checkpoint
+				nextCheckpoint = nextCheckpoint->next;
+			}
+		}
+		checkpoint = checkpoint->next;
+	}
+
+	if (body1 == zLimiter && body2 == App->player->vehicle) {
+		if (App->player->GetLifes() == 1)
+		{
+			exit(0);
+		}
+		else {
+			App->player->vehicle->SetPos(checkpointPos.x, checkpointPos.y + 10, checkpointPos.z);
+			App->player->vehicle->SetVelocity(0);
+			App->player->vehicle->SetAngularVelocity(0);
+			App->player->vehicle->SetRotation(checkpointRot);
+			App->player->SetLifes(App->player->GetLifes() - 1);
+		}
+	}
+	if (body1 == finishLine && body2 == App->player->vehicle) {
+		exit(0);
 	}
 }
 

@@ -55,4 +55,9 @@ public:
 
 	VehicleInfo info;
 	btRaycastVehicle* vehicle;
+
+	//sett velocity angularvelocity and rotation
+	void SetVelocity(vec3 velocity);
+	void SetAngularVelocity(vec3 angularVelocity);
+	void SetRotation(vec3 rotation);
 };

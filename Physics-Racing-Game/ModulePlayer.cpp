@@ -137,6 +137,11 @@ update_status ModulePlayer::Update(float dt)
 
 	if(App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 	{
+		acceleration = -(MAX_ACCELERATION/2);
+	}
+
+	if(App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT)
+	{
 		brake = BRAKE_POWER;
 	}
 
@@ -157,7 +162,6 @@ update_status ModulePlayer::Update(float dt)
 	}
 	*/
 
-	// TITLE
 	char title[80];
 	sprintf_s(title, "%.1f Km/h, position x: %f | y: %f | z: %f", vehicle->GetKmh(), vehicle->GetPos().x, vehicle->GetPos().y, vehicle->GetPos().z);
 	App->window->SetTitle(title);
@@ -166,4 +170,10 @@ update_status ModulePlayer::Update(float dt)
 }
 
 
+void ModulePlayer::SetLifes(int lifes) {
+	this->lifes = lifes;
+}
 
+int ModulePlayer::GetLifes() {
+	return lifes;
+}
